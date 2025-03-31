@@ -4,12 +4,15 @@ import net.minecraft.client.Minecraft
 import net.minecraft.network.play.client.C07PacketPlayerDigging
 import net.minecraft.util.BlockPos
 import net.minecraft.util.EnumFacing
+import net.minecraft.util.Vec3
+import net.minecraft.util.Vec3i
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent
+import kotlin.math.floor
 
 class Nuker {
-    private val l = 1
+    private val l = 2
 
     @SubscribeEvent
     fun update(e : ClientTickEvent) {
@@ -19,7 +22,11 @@ class Nuker {
 
         val player = Minecraft.getMinecraft().thePlayer
         val queue = player.sendQueue
-        val center = player.position
+        val center = Vec3i(
+            floor(player.posX).toInt(),
+            floor(player.posY).toInt(),
+            floor(player.posZ).toInt(),
+        )
 
         for(x in -l..l) for(y in -l..l) for(z in -l..l) {
             val blockPos = BlockPos(
@@ -28,21 +35,13 @@ class Nuker {
                 center.z + z
             )
 
-            val packet1 = C07PacketPlayerDigging(
+            val packet = C07PacketPlayerDigging(
                 C07PacketPlayerDigging.Action.START_DESTROY_BLOCK,
                 blockPos,
                 EnumFacing.DOWN
             )
 
-            val packet2 = C07PacketPlayerDigging(
-                C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK,
-                blockPos,
-                EnumFacing.DOWN
-            )
-
-            Chat.send("Breaking block $blockPos")
-            queue.addToSendQueue(packet1)
-            queue.addToSendQueue(packet2)
+            queue.addToSendQueue(packet)
         }
     }
 }

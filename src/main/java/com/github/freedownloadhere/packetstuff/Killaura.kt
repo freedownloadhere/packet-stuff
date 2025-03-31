@@ -29,7 +29,6 @@ class Killaura {
             if(distance > 3.0) continue
 
             val packet = C02PacketUseEntity(entity, C02PacketUseEntity.Action.ATTACK)
-            Chat.send("Attacking entity ${entity.name}")
             queue.addToSendQueue(packet)
         }
     }
