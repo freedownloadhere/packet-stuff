@@ -8,10 +8,12 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent
 class Mod {
     private val ka = Killaura()
     private val nuker = Nuker()
+    private val sprint = Sprint()
 
     @Mod.EventHandler
     fun init(e : FMLInitializationEvent) {
-        // MinecraftForge.EVENT_BUS.register(ka)
-        MinecraftForge.EVENT_BUS.register(nuker)
+        MinecraftForge.EVENT_BUS.register(ka)
+        MinecraftForge.EVENT_BUS.register(sprint)
+        // MinecraftForge.EVENT_BUS.register(nuker)
     }
 }
